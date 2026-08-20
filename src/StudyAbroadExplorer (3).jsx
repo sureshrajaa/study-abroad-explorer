@@ -108,33 +108,27 @@ function statusBadge(usd) {
 const fmt = (n) => "$" + n.toLocaleString("en-US");
 
 function FlipValue({ value }) {
-  const [display, setDisplay] = useState(value);
-  const [animating, setAnimating] = useState(false);
+  const [tick, setTick] = useState(0);
   const prevValue = React.useRef(value);
 
   React.useEffect(() => {
     if (value !== prevValue.current) {
       prevValue.current = value;
-      setAnimating(true);
-      const swapTimer = setTimeout(() => setDisplay(value), 150);
-      const endTimer = setTimeout(() => setAnimating(false), 320);
-      return () => {
-        clearTimeout(swapTimer);
-        clearTimeout(endTimer);
-      };
+      setTick((t) => t + 1);
     }
   }, [value]);
 
   return (
-    <span style={{ display: "inline-block", perspective: "200px" }}>
+    <span style={{ display: "inline-block", perspective: "220px" }}>
       <span
+        key={tick}
         style={{
           display: "inline-block",
           transformOrigin: "50% 50%",
-          animation: animating ? "flipCell 320ms ease-in-out" : "none",
+          animation: tick > 0 ? "flipCell 450ms ease-out" : "none",
         }}
       >
-        {display}
+        {value}
       </span>
     </span>
   );
@@ -226,9 +220,9 @@ export default function StudyAbroadExplorer() {
     >
       <style>{`
         @keyframes flipCell {
-          0% { transform: rotateX(0deg); }
-          50% { transform: rotateX(-90deg); }
-          100% { transform: rotateX(0deg); }
+          0% { transform: rotateX(-100deg); opacity: 0.3; color: #E8A33D; }
+          55% { transform: rotateX(20deg); }
+          100% { transform: rotateX(0deg); opacity: 1; }
         }
       `}</style>
       <div className="max-w-6xl mx-auto">
